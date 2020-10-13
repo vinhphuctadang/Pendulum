@@ -17,15 +17,22 @@ class Example(QtWidgets.QWidget):
         self.initUI()
 
         self.time = 0
-        self.g = 100
-        self.l = 200
+
+        # w in wt+q
+        self.w = 2*pi*(1/2) 
+
+        # len of the rope
+        self.l = 200 
         self.a0 = pi/3
+
+        # time marker
         self.timePivot = time.time()
 
         # wt + q 
         # temporarily call it angle
         self.angle = -pi
 
+        # center of the pendulum
         self.center = QtCore.QPoint(self.width()//2, self.height()//2)
 
     def getCurrentCoordinate(self):
@@ -46,6 +53,7 @@ class Example(QtWidgets.QWidget):
         self.setWindowTitle('Pendulum')
         self.show()
 
+    # rotate the point q having pivot p
     def rotate(self, p, q):
         q = q * pi / 180
         return QtCore.QPoint(
@@ -69,7 +77,7 @@ class Example(QtWidgets.QWidget):
         # physic goes here
         deltaTime = self.getDeltaTime()
 
-        w = sqrt(self.g / self.l)
+        w = self.w
 
         self.angle += deltaTime * w 
         self.angle -= (self.angle > 2*pi) * 2*pi 
@@ -77,7 +85,10 @@ class Example(QtWidgets.QWidget):
         # render
         penCenter = self.getCurrentCoordinate()
 
+        # draw the rope
         qp.drawLine(self.center.x(), self.center.y()-self.l, penCenter.x(), penCenter.y())
+
+        # then draw the mass
         qp.drawEllipse(penCenter, 20, 20)
         
         qp.end()  
